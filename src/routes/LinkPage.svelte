@@ -134,10 +134,14 @@
         justify-content: center;
         overflow-y: auto;
     }
-
+    
     div li {
         display: flex; 
-        align-items: center;
+        align-items: center; 
+        justify-content: center; 
+        
+        gap: 0.5rem;
+        text-align: center;
     }
     
     .edit-button{
@@ -179,14 +183,6 @@
     
     .edit-button:hover {
         opacity: 1;
-    }
-    
-    div li {
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
-        
-        gap: 0.5rem
     }
 
     
