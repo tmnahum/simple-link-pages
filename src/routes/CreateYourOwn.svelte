@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { goto, invalidateAll, replaceState } from "$app/navigation";
-  import { page } from "$app/stores";
+    import { onMount } from "svelte";
     import type { LinkPageData } from "./data";
 
     export let defaultData: any = null
@@ -15,9 +14,12 @@
     $: linksPageUrl = `/custom?data=${encodedData}`
     // $: editUrl = `/?data=${encodedData}`
 
+    onMount(() => {
+        console.log(JSON.stringify(dataJson, null, 2))
+    })
 </script>
 
-
+<!--  TODO: might honestly be easier to just have a json text input option  -->
 <br>
 <div id="create-your-own"> 
     <h2>Create Your Own:</h2>
@@ -80,7 +82,7 @@
 
     <div class="final-button-div">
         
-        <a href="{linksPageUrl}" target="_blank" data-sveltekit-reload>Go to page</a>
+        <a href="{linksPageUrl}" data-sveltekit-reload>Go to page</a>
         <!-- TODO: live update forum state in the url and make sure back and forward button work, then remove the targe=_blank-->
     </div>
 </div>

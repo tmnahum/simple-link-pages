@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { beforeUpdate, onMount } from "svelte";
+    import { beforeUpdate, onMount } from "svelte";
     import type { LinkPageData } from "./data";
-  import { goto, invalidate, invalidateAll } from "$app/navigation";
+    import { goto, invalidate, invalidateAll } from "$app/navigation";
 
     export let data: LinkPageData;
 
@@ -29,6 +29,7 @@
     }
 
     // our pages favicon light/dark
+    // todo: improve this so tht it shows up in bookmarks/etc instead of loading after the page is loaded
     onMount(()=>{
         if (typeof window == "undefined") return
         if (typeof data.favicon == "string" ) return
@@ -49,17 +50,20 @@
         setTimeout(updateFavicon, 700); // just in case
     })
 
+    function getCustomUrl() {
+        return `${window.location.origin}/?data=${encodeURIComponent(JSON.stringify(data))}`
+    }
     // 
     onMount(() => {
         if (typeof window == "undefined") return
-        function getCustomUrl() {
-            return `${window.location.origin}/?data=${encodeURIComponent(JSON.stringify(data))}`
-        }
+        
 
         // TODO: add support to CreateYourOwn for dark/light mode URLs
 
         console.log("FORK THIS PAGE AT:")
         console.log(getCustomUrl())
+        //@ts-ignore
+        document.getElementById("edit-link")!.href = getCustomUrl()
     })
 
 
@@ -90,9 +94,12 @@
             {/if}        
         {/each}
     </div>
-
-    <!-- <p>{data.favicon}</p> -->
 </main>
+<a id="edit-link" class="edit-button" title="Edit this page" data-sveltekit-reload>
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z" />
+    </svg>
+</a>
 
 <svelte:head>
     <!-- TODO add full favicon support so it works in safari -->
@@ -128,6 +135,52 @@
         overflow-y: auto;
     }
 
+    div li {
+        display: flex; 
+        align-items: center;
+    }
+    
+    .edit-button{
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        z-index: 50;
+        opacity: 0.7;
+        transition: all 0.2s ease;
+        background: none;
+        border: none;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        color: black;
+    }
+    .edit-button,
+    .edit-button:link,
+    .edit-button:visited,
+    .edit-button:hover,
+    .edit-button:active,
+    .edit-button:focus  {
+        color: black;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+        .edit-button:link,
+        .edit-button:visited,
+        .edit-button:hover,
+        .edit-button:active,
+        .edit-button:focus  {
+            color: white;
+        }
+    }
+    
+    .edit-button:hover {
+        opacity: 1;
+    }
+    
     div li {
         display: flex; 
         align-items: center; 
